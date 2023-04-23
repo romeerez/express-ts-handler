@@ -1,0 +1,16 @@
+{
+  "name": "examples",
+  "scripts": {
+    "start": "nodemon --watch src --exec 'ts-node' src/server.ts"
+  },
+  "dependencies": {
+    "express-ts-handler": "0.0.1",
+    "@types/express": "^4.17.17",
+    "express": "^4.17.17",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "nodemon": "^2.0.22"
+  }
+}

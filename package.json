@@ -1,0 +1,59 @@
+{
+  "name": "express-ts-handler",
+  "version": "0.0.1",
+  "description": "Express route handler for type-safe validations",
+  "keywords": [
+    "express",
+    "validations",
+    "route",
+    "handler",
+    "zod",
+    "typescript"
+  ],
+  "author": "Roman Kushyn",
+  "license": "ISC",
+  "homepage": "https://github.com/romeerez/express-ts-handler",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/romeerez/express-ts-handler"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "typings": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "vitest",
+    "build": "rimraf ./dist/ && rollup -c rollup.config.mjs",
+    "prepublishOnly": "pnpm build"
+  },
+  "peerDependencies": {
+    "express": "4.x"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^18.16.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@typescript-eslint/parser": "^5.59.0",
+    "esbuild": "^0.17.15",
+    "eslint": "^8.39.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "express": "^4.17.17",
+    "prettier": "^2.8.8",
+    "rimraf": "^5.0.0",
+    "rollup": "^3.20.2",
+    "rollup-plugin-dts": "^5.3.0",
+    "rollup-plugin-esbuild": "^5.0.0",
+    "typescript": "^5.0.4",
+    "vitest": "^0.30.1"
+  }
+}
