@@ -25,6 +25,7 @@ const authMiddleware = (req: Request) => {
   return Object.assign(req, { user: { id: 1 } });
 };
 
+// define the validation we will use later in the routes
 const ItemType = z.object({
   id: z.number().int(),
   name: z.string(),
@@ -38,10 +39,6 @@ const app = express();
 // parse json body
 app.use(express.json());
 
-app.get('/', (req) => {
-  req.query.body?.toLocaleString();
-});
-
 // get item by id
 app.get(
   '/items/:id',
@@ -51,8 +48,12 @@ app.get(
     },
     result: ItemType,
     async handler(req) {
+      // id is properly typed
       const { id } = req.params;
       const item = await findItemById(id);
+      
+      // if we remove this check,
+      // TS will let us know that we are about to return ItemType | undefined instead of stricly ItemType
       if (!item) throw new AppError('Not found');
 
       return item;
@@ -69,6 +70,7 @@ app.get(
     },
     result: ItemType.array(),
     handler(req) {
+      // req.query.name is properly typed, return type is type-checked
       return searchItemsByName(req.query.name);
     },
   }),
@@ -84,7 +86,9 @@ app.post(
     result: ItemType,
     async handler(req) {
       return createItem({
+        // req.body is properly typed
         name: req.body.name,
+        // req.user also is typed, it has the type returned by authMiddleware
         userId: req.user.id,
       });
     },
@@ -96,13 +100,20 @@ app.post(
 app.use((err: unknown, _req: Request, res: Response, _: NextFunction) => {
   console.error(err);
 
+  // send app errors like Unauthorized, Not Found
   if (err instanceof AppError) {
     res.status(err.status).send(err.message);
-  } else if (err instanceof ZodError) {
-    res.status(422).send(err.formErrors);
-  } else {
-    res.status(500).send('Something went wrong');
+    return;
   }
+  
+  // send validation errors info, client will see what what the failed fields and why did they fail
+  if (err instanceof ZodError) {
+    res.status(422).send(err.formErrors);
+    return;
+  }
+
+  // don't expose any other error to the client
+  res.status(500).send('Something went wrong');
 });
 
 const port = process.env.PORT || 3000;
