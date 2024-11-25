@@ -143,7 +143,7 @@ export const makeHandler = <T extends BaseType>({
           res,
           localNext,
         );
-        if (!res.headersSent && !err) {
+        if (!res.headersSent && !err && output !== void 0) {
           res.send(output as Output<Exclude<typeof result, undefined>>);
         }
       } catch (e) {
